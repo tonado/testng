@@ -4,6 +4,8 @@ from Phase1Result import *
 
 from TestScope import TestScope
 
+from Message import *
+
 ##########################################################
 class PreprocessScopeParser:
    #######################################################
