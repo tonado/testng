@@ -13,3 +13,6 @@ ADD_LIBRARY(testngpp-except-static STATIC ${TESTNGPP_SRCS})
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
 
+INSTALL(
+   TARGETS testngpp-except-shared
+   LIBRARY DESTINATION lib)
