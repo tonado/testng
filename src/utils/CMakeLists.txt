@@ -23,3 +23,6 @@ ADD_LIBRARY(testngpp-utils-static STATIC ${TESTNGPP_SRCS})
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
 
+INSTALL(
+   TARGETS testngpp-utils-shared
+   LIBRARY DESTINATION lib)
