@@ -75,7 +75,6 @@ class GlobalParser:
    def __is_fixture_def(self, line):
      if self.__has_fixture_annotation() :
         name = might_be_fixture_def(line)
-        print name
         if name != None :
            return name 
 
