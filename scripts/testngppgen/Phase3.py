@@ -20,6 +20,9 @@ fixture_re2  = re.compile( \
 
 fixture_re3  = re.compile( \
    r'''^\s*(struct|class)\s+(?P<fixtureId>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*public\s+((CxxTest)\s*::)?\s*TestSuite\s*$''' )
+
+fixture_re4  = re.compile( \
+   r'''^\s*(struct|class)\s+(?P<fixtureId>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*public\s+([A-Za-z_][A-Za-z0-9_]*)\s*$''' )
 ##########################################################
 def is_fixture_def(line):
    matched = fixture_re1.match(line)
@@ -37,18 +40,50 @@ def is_fixture_def(line):
    return None
    
 ##########################################################
+def might_be_fixture_def(line):
+   matched = fixture_re4.match(line)
+   if matched:
+      return "", matched.group("fixtureId"), None
+
+   return None
+
+##########################################################
 class GlobalParser:
    def __init__(self, file):
       self.file = file
       self.annotations = []
 
    #######################################################
+   def __has_fixture_annotation(self):
+      for anno in self.annotations:
+         if anno.get_tag() in ["fixture"] : return True
+
+      return False
+
+   #######################################################
    def should_parse_sub_scopes(self):
       return True
 
    #######################################################
+   def __has_test_annotation(self):
+      for anno in self.annotations:
+         if anno.get_tag() in ["fixture"] : return True
+
+      return False
+
+   #######################################################
+   def __is_fixture_def(self, line):
+     if self.__has_fixture_annotation() :
+        name = might_be_fixture_def(line)
+        print name
+        if name != None :
+           return name 
+
+     return is_fixture_def(line)
+
+   #######################################################
    def get_elem_parser(self, container, file, line):
-      name = is_fixture_def(line.get_content())
+      name = self.__is_fixture_def(line.get_content())
       if name == None:
         return None
 

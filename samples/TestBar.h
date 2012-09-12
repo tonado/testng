@@ -162,5 +162,16 @@ struct TestBar3 : public TESTNGPP_NS::TestFixture
    {}
 };
 
+// @fixture
+struct TestBar4 : public TestBar3
+{
+   // @test
+   void case40()
+   {}
 
+   void testcase41()
+   {
+      ASSERT_FALSE(true);
+   }
+};
 
