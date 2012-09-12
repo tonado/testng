@@ -8,7 +8,8 @@ SET(TESTNGPP_SRCS
   AssertionFailure.cpp 
 )
 
-ADD_LIBRARY(testngpp-except STATIC ${TESTNGPP_SRCS})
+ADD_LIBRARY(testngpp-except-shared SHARED ${TESTNGPP_SRCS})
+ADD_LIBRARY(testngpp-except-static STATIC ${TESTNGPP_SRCS})
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/include)
 

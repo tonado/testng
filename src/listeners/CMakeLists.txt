@@ -8,7 +8,7 @@ ADD_DEFINITIONS(
     -DVERSION=${VERSION}
 )
 
-SET(TESTNGPP_LIBRARY testngpp-except testngpp-utils mem-checker)
+SET(TESTNGPP_LIBRARY testngpp-except-shared testngpp-utils-shared mem-checker-shared)
 
 IF(CMAKE_SYSTEM_NAME MATCHES Linux)
   IF(CMAKE_COMPILER_IS_GNUCXX)
