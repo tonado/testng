@@ -67,8 +67,8 @@ struct FailureReporter : public Reporter
 
 
 namespace {
-mem_checker::Reporter * info;
-mem_checker::Reporter * failure;
+  mem_checker::Reporter * info;
+  mem_checker::Reporter * failure;
 }
 
 bool MemChecker::isOpenInAnnotation()
@@ -98,16 +98,18 @@ void MemChecker::start()
         return;
     }
 
+#if 0
 	ModuleLoader *loader = testcase->getLoader();
 
-	typedef void (*start_t)(mem_checker::Reporter *, mem_checker::Reporter *);
+    typedef void (*start_t)(mem_checker::Reporter *, mem_checker::Reporter *);
     start_t starter = (start_t)loader->findSymbol("startMemChecker");
 
-	TestFixture *fixture = testcase->getFixture();
+    TestFixture *fixture = testcase->getFixture();
 	
-	info = mem_checker::createReporter(InfoReporter(fixture));
-	failure = mem_checker::createReporter(FailureReporter(fixture)); // Note: Reporter is new in runner.exe, and used in .dll. is this ok?
+    info = mem_checker::createReporter(InfoReporter(fixture));
+    failure = mem_checker::createReporter(FailureReporter(fixture)); // Note: Reporter is new in runner.exe, and used in .dll. is this ok?
 	starter(info, failure);
+#endif
 }
 
 void MemChecker::verify()
@@ -117,12 +119,13 @@ void MemChecker::verify()
         return;
     }
 
+#if 0
 	ModuleLoader *loader = testcase->getLoader();
 	
-	typedef void (*verify_t)(void);    
-	verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");    
+	typedef void (*verify_t)(void); 
+	verify_t verifier = (verify_t)loader->findSymbol("verifyMemChecker");  
 	verifier(); 
-
+#endif
 	//delete info;  // Note: this will cause linux run exception
 	//delete failure;
 	//info = 0;

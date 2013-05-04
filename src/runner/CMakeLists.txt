@@ -69,6 +69,14 @@ SET(WIN32_SANDBOX_SRCS
    win32/Win32TestCaseSandbox.cpp
 )
 
+SET(TESTNG_DYNAMIC_LIB_SRCS
+  runners/DynamicSuiteLoader.cpp
+  runners/DynamicLoader.cpp
+  loaders/ModuleSuiteFileLoader.cpp 
+  loaders/ModuleSuiteFileLoaderFactory.cpp 
+  DynamicTestLoaderFactory.cpp
+)
+
 SET(TESTNGRUNNER_LIB_SRCS
   runners/TestSuiteRunner.cpp 
   runners/SimpleTestCaseRunner.cpp 
@@ -81,11 +89,7 @@ SET(TESTNGRUNNER_LIB_SRCS
   runners/TestFixtureContext.cpp
   runners/TestRunnerContext.cpp
   runners/TestCaseRunnerFactory.cpp
-  runners/DynamicSuiteLoader.cpp
-  runners/DynamicLoader.cpp
 
-  loaders/ModuleSuiteFileLoader.cpp 
-  loaders/ModuleSuiteFileLoaderFactory.cpp 
   loaders/ModuleTestListenerLoader.cpp 
   loaders/ModuleTestListenerLoaderFactory.cpp 
 
@@ -144,8 +148,8 @@ IF(CYGWIN)
 SET(TESTNGRUNNER_LIB_SRCS
      ${TESTNGRUNNER_LIB_SRCS}
      ../TestSuiteDesc.cpp
-	 ../TestFixture.cpp
-	 ../MemChecker.cpp
+     ../TestFixture.cpp
+     ../MemChecker.cpp
   )
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/3rdparty)
 ENDIF(CYGWIN)
@@ -174,6 +178,15 @@ IF(UNIX)
   ADD_DEFINITIONS(-g -ggdb)
 ENDIF(UNIX)
 
+ADD_LIBRARY(testngpp-static-runner-lib STATIC 
+  ${TESTNGRUNNER_LIB_SRCS}
+  runners/StaticSuiteLoader.cpp
+  runners/StaticLoader.cpp
+  StaticTestLoaderFactory.cpp
+  ../TestFixture.cpp
+  ../MemChecker.cpp
+  TestRunnerMain.cpp) 
+
 ADD_LIBRARY(testngpp-runner-lib STATIC ${TESTNGRUNNER_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(testngpp-runner-lib ${TESTNGPP_LIBRARY})
@@ -181,7 +194,9 @@ TARGET_LINK_LIBRARIES(testngpp-runner-lib ${TESTNGPP_LIBRARY})
 IF(UNIX)
 ADD_EXECUTABLE(testngpp-runner 
    TestRunnerMain.cpp 
-   ../MemChecker.cpp ../TestFixture.cpp) 
+   ${TESTNG_DYNAMIC_LIB_SRCS}
+   ../MemChecker.cpp
+   ../TestFixture.cpp) 
 ENDIF(UNIX)
 
 IF(NOT UNIX)
@@ -212,6 +227,10 @@ ENDIF(TESTNGPP_USE_DLOPEN)
 INSTALL(
    TARGETS testngpp-runner
    RUNTIME DESTINATION bin)
+
+INSTALL(
+   TARGETS testngpp-static-runner-lib
+   ARCHIVE DESTINATION lib)
 
 IF(MSVC)
   INSTALL(

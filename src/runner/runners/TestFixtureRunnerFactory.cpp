@@ -12,6 +12,8 @@
 #endif
 #endif
 
+#include <iostream>
+
 TESTNGPP_NS_START
 
 namespace
@@ -51,6 +53,9 @@ TestFixtureRunner*
 TestFixtureRunnerFactory::
 createInstance(bool useSandbox, unsigned int maxConcurrent)
 {
+   if(useSandbox) std::cout << "use sandbox" << std::endl;
+   else std::cout << "not using sandbox" << std::endl;
+
 #if defined(TESTNGPP_DISABLE_SANDBOX) && TESTNGPP_DISABLE_SANDBOX
    return createSimpleInstance();
 #else

@@ -10,7 +10,7 @@
 #include <testngpp/comm/ExceptionKeywords.h>
 
 #include <testngpp/internal/MemChecker.h>
-#include <testngpp/runner/DynamicLoader.h>
+#include <testngpp/runner/TestLoaderFactory.h>
 
 USING_TESTNGPP_NS
 
@@ -34,7 +34,7 @@ void usage(const char * program)
              << std::endl
              << "   -s               using sandbox runner"
              << std::endl
-             << "   -m               not checking memory leakage"
+             << "   -m               checking memory leakage"
              << std::endl
              << std::endl;
    exit(1);
@@ -156,9 +156,8 @@ bool useSandbox(OptionList& options)
 static
 bool useMemChecker(OptionList& options)
 {
-   return !getFlagOption("m", options);
+   return getFlagOption("m", options);
 }
-
 
 ////////////////////////////////////////////////////////////
 int real_main(int argc, char* argv[])
@@ -166,11 +165,6 @@ int real_main(int argc, char* argv[])
    OptionList options;
 
    options.parse(argc, argv, "f:L:l:c:t:s:m");
-
-   if(options.args.size() == 0)
-   {
-      usage("testngpp-runner");
-   }
 
    //showOptions(options);
    
@@ -195,9 +189,7 @@ int real_main(int argc, char* argv[])
    
    std::string tagsFilterOption = getSingleOption("t", options, "*");
                                                  
-   DynamicLoader loader(options.args);
-
-   return TestRunner().runTests(useSandbox(options), maxConcurrent, &loader, listeners
+   return TestRunner().runTests(usesSandbox, maxConcurrent, createTestLoader(options.args), listeners
                          , searchingPathsOfListeners, fixtures, tagsFilterOption);
 }
 
