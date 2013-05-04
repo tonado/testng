@@ -19,11 +19,10 @@
 #ifndef __TESTNGPP_TEST_SUITE_DESC_H
 #define __TESTNGPP_TEST_SUITE_DESC_H
 
-#include <string>
-
 #include <testngpp/testngpp.h>
-
 #include <testngpp/internal/TestSuiteInfoReader.h>
+#include <string>
+#include <vector>
 
 TESTNGPP_NS_START
 
@@ -32,35 +31,21 @@ struct TestFixtureDesc;
 struct TestSuiteDesc
    : public TestSuiteInfoReader
 {
-   TestSuiteDesc(const std::string& name
-                  , TestFixtureDesc** arrayOfTestFixtures
-                  , unsigned int sizeOfArray)
+   TestSuiteDesc(const std::string& name)
       : nameOfSuite(name)
-      , testFixtures(arrayOfTestFixtures)
-      , numberOfFixtures(sizeOfArray)
-      , fileName("")
    {}
 
-   const std::string& getName() const
-   { return nameOfSuite; }
+   const std::string& getName() const;
 
-   const std::string& getFileName() const
-   { return fileName; }
-
-   const unsigned int getNumberOfTestFixtures() const
-   { return numberOfFixtures; }
-
-   void setFileName(const std::string name)
-   { fileName = name; }
-
+   const unsigned int getNumberOfTestFixtures() const;
    const unsigned int getNumberOfTestCases() const;
    TestFixtureDesc* getTestFixture(unsigned int index) const;
 
+   void registerFixtures(TestFixtureDesc** fixtures, unsigned int num);
+
 private:
    std::string nameOfSuite;
-   TestFixtureDesc** testFixtures;
-   unsigned int numberOfFixtures;
-   std::string fileName;
+   std::vector<TestFixtureDesc*> fixtures;
 };
 
 TESTNGPP_NS_END

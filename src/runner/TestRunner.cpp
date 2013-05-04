@@ -180,16 +180,12 @@ runAllTests
       , TagsFilters* tagsFilters
       , const TestFilter* filter)
 {
-   TestResultCollector* collector = \
-      resultManager->getResultCollector();
-
-   TestRunnerContext* context = \
-      loadSuites(suites, tagsFilters, filter);
+   TestResultCollector* collector = resultManager->getResultCollector();
+   TestRunnerContext* context = loadSuites(suites, tagsFilters, filter);
 
    while(1)
    {
-      const TaggableObjFilter* taggableFilter = \
-         tagsFilters->startOnNext();
+      const TaggableObjFilter* taggableFilter = tagsFilters->startOnNext();
       if(taggableFilter == 0)
       {
          break;

@@ -9,4 +9,6 @@ if __name__ == '__main__':
    file = path + '/testngppgen.py'
    package = path + '/testngppgen'
    py_compile.compile(file)
+   file = path + '/testng-suite-gen.py'
+   py_compile.compile(file)
    compileall.compile_dir(package, 0)

@@ -23,6 +23,7 @@ ADD_CUSTOM_TARGET(cleanup-testngppgen
 
 SET(PYC_FILES 
   ${THIS_DIR}/testngppgen.pyc
+  ${THIS_DIR}/testngpp-suite-gen.pyc
   ${THIS_DIR}/testngppgen/AnnotationParser.pyc
   ${THIS_DIR}/testngppgen/ElemParser.pyc 
   ${THIS_DIR}/testngppgen/Fixture.pyc

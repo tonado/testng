@@ -21,6 +21,8 @@ SET(TESTNGPP_SRCS
   mem_checker/NoThrowsReporter.cpp
 )
 
+SET(TESTNGPP_USER_SRC TestFixtureRegister.cpp)
+
 # include debug info in testngpp.lib
 #IF(MSVC)
 #	ADD_DEFINITIONS( /Z7 )
@@ -32,11 +34,11 @@ ELSE(WIN32)
   ADD_LIBRARY(testngpp SHARED ${TESTNGPP_SRCS})
 ENDIF(WIN32)
 
-#IF(UNIX)
-#ADD_DEFINITIONS(
-#    -g -ggdb
-#)
-#ENDIF(UNIX)
+ADD_LIBRARY(testngpp-user STATIC ${TESTNGPP_USER_SRC})
+
+IF(UNIX)
+  ADD_DEFINITIONS(-g -ggdb)
+ENDIF(UNIX)
 
 # can not link to other lib in cmake 
 #TARGET_LINK_LIBRARIES(mem-checker)
@@ -53,6 +55,10 @@ ELSE(WIN32)
    TARGETS testngpp
    LIBRARY DESTINATION lib)
 ENDIF(WIN32)
+
+INSTALL(
+   TARGETS testngpp-user
+   ARCHIVE DESTINATION lib)
 
 IF(MSVC)
   INSTALL(

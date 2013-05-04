@@ -22,12 +22,25 @@
 TESTNGPP_NS_START
 
 //////////////////////////////////////////////////////////////
+const std::string& TestSuiteDesc::getName() const
+{
+   return nameOfSuite;
+}
+
+//////////////////////////////////////////////////////////////
+const unsigned int TestSuiteDesc::getNumberOfTestFixtures() const
+{
+   return fixtures.size();
+}
+
+
+//////////////////////////////////////////////////////////////
 const unsigned int
 TestSuiteDesc::getNumberOfTestCases() const
 {
    unsigned int numberOfTestCases = 0;
 
-   for(unsigned int i=0; i<numberOfFixtures; i++)
+   for(unsigned int i=0; i<fixtures.size(); i++)
    {
       numberOfTestCases += getTestFixture(i)->getNumberOfTestCases();
    }
@@ -39,12 +52,22 @@ TestSuiteDesc::getNumberOfTestCases() const
 TestFixtureDesc*
 TestSuiteDesc::getTestFixture(unsigned int index) const
 {
-   if(index >= numberOfFixtures)
+   if(index >= fixtures.size())
    {
       return 0;
    }
 
-   return testFixtures[index];
+   return fixtures[index];
+
+}
+
+//////////////////////////////////////////////////////////////
+void TestSuiteDesc::registerFixtures(TestFixtureDesc** fixtures, unsigned int num)
+{
+   for(unsigned int i=0; i<num; ++i)
+   {
+      this->fixtures.push_back(fixtures[i]);
+   }
 }
 
 //////////////////////////////////////////////////////////////

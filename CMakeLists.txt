@@ -32,7 +32,7 @@ ADD_SUBDIRECTORY(src/mem_checker)
 ADD_SUBDIRECTORY(src/listeners)
 ADD_SUBDIRECTORY(src/runner)
 ADD_SUBDIRECTORY(scripts)
-ADD_SUBDIRECTORY(samples)
+#ADD_SUBDIRECTORY(samples)
 
 ########################################################
 INSTALL(DIRECTORY include/testngpp DESTINATION include

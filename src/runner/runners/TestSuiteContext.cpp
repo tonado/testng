@@ -67,8 +67,7 @@ public:
 };
 
 /////////////////////////////////////////////////////////////////
-TestSuiteContextImpl::
-TestSuiteContextImpl
+TestSuiteContextImpl::TestSuiteContextImpl
       ( TestSuiteLoader* loader
       , const std::string& path
       , TestResultCollector* collector
@@ -93,8 +92,7 @@ TestSuiteContextImpl
 }
 
 /////////////////////////////////////////////////////////////////
-TestSuiteContextImpl::
-~TestSuiteContextImpl()
+TestSuiteContextImpl::~TestSuiteContextImpl()
 {
    clear();
 
@@ -102,18 +100,14 @@ TestSuiteContextImpl::
 }
 
 /////////////////////////////////////////////////////////////////
-void
-TestSuiteContextImpl::
-clear()
+void TestSuiteContextImpl::clear()
 {
    unloadFixtures();
    suiteLoader->unload();
 }
 
 /////////////////////////////////////////////////////////////////
-void
-TestSuiteContextImpl::
-loadFixtures
+void TestSuiteContextImpl::loadFixtures
    ( TagsFilters* tagsFilter 
    , const TestFilter* filter)
 {
@@ -161,25 +155,19 @@ load( const std::string& path )
 }
 
 /////////////////////////////////////////////////////////////////
-TestSuiteDesc* 
-TestSuiteContext::
-getSuite() const
+TestSuiteDesc* TestSuiteContext::getSuite() const
 {
    return This->suite;
 }
 
 /////////////////////////////////////////////////////////////////
-unsigned int 
-TestSuiteContext::
-numberOfFixtures() const
+unsigned int TestSuiteContext::numberOfFixtures() const
 {
    return This->fixtures.size();
 }
 
 /////////////////////////////////////////////////////////////////
-TestFixtureContext* 
-TestSuiteContext::
-getFixture(unsigned int index) const
+TestFixtureContext* TestSuiteContext::getFixture(unsigned int index) const
 {
    if(index >= This->fixtures.size())
    {
@@ -189,15 +177,13 @@ getFixture(unsigned int index) const
    return This->fixtures[index];
 }
 
-const std::string&
-TestSuiteContext::
-getSuitePath() const
+/////////////////////////////////////////////////////////////////
+const std::string& TestSuiteContext::getSuitePath() const
 {
 	return This->suitePath;
 }
 /////////////////////////////////////////////////////////////////
-TestSuiteContext::
-TestSuiteContext
+TestSuiteContext::TestSuiteContext
       ( TestSuiteLoader* loader
       , const std::string& path
       , TestResultCollector* collector

@@ -336,7 +336,7 @@ class FixtureGenerator:
 
 ################################################
 fixture_desc_template = '''
-/*static*/ TESTNGPP_NS::TestFixtureDesc %s
+static TESTNGPP_NS::TestFixtureDesc %s
    ( "%s"
    , "%s"
    , %s
@@ -455,6 +455,7 @@ dep_headers = [
    "internal/TestCase.h",
    "internal/TestFixtureDesc.h",
    "internal/TestSuiteDesc.h",
+   "internal/TestFixtureRegister.h",
 ]
 
 ################################################
@@ -463,21 +464,20 @@ static TESTNGPP_NS::TestFixtureDesc* %s[] = {'''
 
 ################################################
 suite_desc_template = '''
-static TESTNGPP_NS::TestSuiteDesc %s
-   ( "%s"
-   , %s
+static TESTNGPP_NS::TestFixtureRegister selfRegistery
+   ( %s
    , (sizeof(%s)/sizeof(%s[0])) - 1
    );
 
 '''
 
 ################################################
-suite_getter_template = '''
-extern "C" DLL_EXPORT TESTNGPP_NS::TestSuiteDesc* %s() {
-   return &%s;
-}
-
-'''
+#suite_getter_template = '''
+#extern "C" DLL_EXPORT TESTNGPP_NS::TestSuiteDesc* %s() {
+#   return &%s;
+#}
+#
+#'''
 
 ################################################
 class SuiteGenerator:
@@ -523,8 +523,6 @@ class SuiteGenerator:
    #############################################
    def generate_suite_desc(self):
       suite_def = suite_desc_template % ( \
-         get_suite_desc_name(self.suite), \
-         self.suite, \
          get_fixture_array_name(self.suite), \
          get_fixture_array_name(self.suite), \
          get_fixture_array_name(self.suite) )
@@ -533,9 +531,9 @@ class SuiteGenerator:
 
 
    #############################################
-   def generate_suite_getter(self):
-      suite_getter = suite_getter_template % ( get_suite_getter_name(), get_suite_desc_name(self.suite))
-      Output.output(suite_getter, self.file)
+#   def generate_suite_getter(self):
+#      suite_getter = suite_getter_template % ( get_suite_getter_name(), get_suite_desc_name(self.suite))
+#      Output.output(suite_getter, self.file)
 
    #############################################
    def generate_dep_headers(self):
@@ -556,8 +554,8 @@ class SuiteGenerator:
       self.generate_fixture_descs()
       self.generate_fixture_array()
       self.generate_suite_desc()
-      if not self.recordFixture :
-          self.generate_suite_getter()
+#      if not self.recordFixture :
+#          self.generate_suite_getter()
 
 ################################################
 def verify_testcase_deps(scopes):

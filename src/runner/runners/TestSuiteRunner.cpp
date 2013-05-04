@@ -49,21 +49,18 @@ TestSuiteRunner::~TestSuiteRunner()
 
 /////////////////////////////////////////////////////////////////
 void
-TestSuiteRunnerImpl::
-runAllFixtures(TestSuiteContext* suite, const TestCaseFilter* filter)
+TestSuiteRunnerImpl::runAllFixtures(TestSuiteContext* suite, const TestCaseFilter* filter)
 {
    for(unsigned int i=0; i<suite->numberOfFixtures(); i++)
    {
       TestFixtureContext* fixture = suite->getFixture(i);
-
-	  fixtureRunner->run(fixture, resultCollector, filter, suite->getSuitePath());
+      fixtureRunner->run(fixture, resultCollector, filter, suite->getSuitePath());
    }
 }
 
 /////////////////////////////////////////////////////////////////
 void
-TestSuiteRunnerImpl::
-run(TestSuiteContext* suite, const TestCaseFilter* filter)
+TestSuiteRunnerImpl::run(TestSuiteContext* suite, const TestCaseFilter* filter)
 {
    resultCollector->startTestSuite(suite->getSuite());
 	runAllFixtures(suite, filter);
@@ -72,8 +69,7 @@ run(TestSuiteContext* suite, const TestCaseFilter* filter)
 
 /////////////////////////////////////////////////////////////////
 void
-TestSuiteRunner::
-run(TestSuiteContext* suite, const TestCaseFilter* filter)
+TestSuiteRunner::run(TestSuiteContext* suite, const TestCaseFilter* filter)
 {
    This->run(suite, filter);
 }
