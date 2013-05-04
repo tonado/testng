@@ -10,6 +10,7 @@
 TESTNGPP_NS_START
 
 struct TestRunnerImpl;
+struct TestLoader;
 
 struct TestRunner
 {
@@ -19,7 +20,7 @@ public:
 
    int runTests( bool useSandboxRunner
                , unsigned int maxConcurrent
-               , const StringList& suitePaths
+               , TestLoader* loader
                , const StringList& listenerNames
                , const StringList& searchingPathsOfListeners
                , const StringList& fixtures

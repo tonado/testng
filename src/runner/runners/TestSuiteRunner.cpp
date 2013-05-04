@@ -27,7 +27,7 @@ struct TestSuiteRunnerImpl
 
    void runAllFixtures(TestSuiteContext* suite, const TestCaseFilter* filter);
 
-	void run(TestSuiteContext* suite, const TestCaseFilter* filter);
+   void run(TestSuiteContext* suite, const TestCaseFilter* filter);
 
    TestFixtureRunner* fixtureRunner;     // X
    TestResultCollector* resultCollector; // X
@@ -63,7 +63,7 @@ void
 TestSuiteRunnerImpl::run(TestSuiteContext* suite, const TestCaseFilter* filter)
 {
    resultCollector->startTestSuite(suite->getSuite());
-	runAllFixtures(suite, filter);
+   runAllFixtures(suite, filter);
    resultCollector->endTestSuite(suite->getSuite());
 }
 

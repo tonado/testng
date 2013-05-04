@@ -9,9 +9,8 @@
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestSuiteContext.h>
 #include <testngpp/runner/TestRunnerContext.h>
-
-#include <testngpp/runner/loaders/ModuleTestSuiteLoaderFactory.h>
-#include <testngpp/runner/loaders/TestSuiteLoader.h>
+#include <testngpp/runner/TestLoader.h>
+#include <testngpp/runner/TestSuiteLoader.h>
 
 TESTNGPP_NS_START
 
@@ -19,7 +18,7 @@ TESTNGPP_NS_START
 struct TestRunnerContextImpl
 {
    TestRunnerContextImpl
-      ( const StringList& nameOfSuites
+      ( TestLoader*
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter);
@@ -30,14 +29,14 @@ private:
 
    void
    loadSuite
-      ( const std::string& pathOfSuite
+      ( TestSuiteLoader*
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter);
 
    void
    loadSuites
-      ( const StringList& suites
+      ( TestLoader*
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter);
@@ -53,13 +52,13 @@ public:
 /////////////////////////////////////////////////////////////////
 TestRunnerContextImpl::
 TestRunnerContextImpl
-      ( const StringList& suites
+      ( TestLoader* testLoader
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter)
 {
 
-   loadSuites( suites
+   loadSuites( testLoader
              , collector
              , tagsFilter
              , filter);
@@ -76,18 +75,15 @@ TestRunnerContextImpl::
 void
 TestRunnerContextImpl::
 loadSuite
-      ( const std::string& pathOfSuite
+      ( TestSuiteLoader* loader
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter)
 {
-   TestSuiteLoader* loader = ModuleTestSuiteLoaderFactory().create();
-
    __TESTNGPP_TRY
    {
       TestSuiteContext* suite = \
          new TestSuiteContext( loader
-                             , pathOfSuite
                              , collector
                              , tagsFilter
                              , filter);
@@ -104,15 +100,15 @@ loadSuite
 /////////////////////////////////////////////////////////////////
 void
 TestRunnerContextImpl::
-loadSuites( const StringList& suites
+loadSuites( TestLoader* testLoader
           , TestResultCollector* collector
           , TagsFilters* tagsFilter
           , const TestFilter* filter)
 {
-   StringList::Type::const_iterator i = suites.get().begin();
-   for(; i != suites.get().end(); i++)
+   for(unsigned int i=0; i < testLoader->getNumOfSuites(); i++)
    {
-      loadSuite(*i, collector, tagsFilter, filter);
+      TestSuiteLoader* loader = testLoader->getSuiteLoader(i);
+      loadSuite(loader, collector, tagsFilter, filter);
    }
 }
 
@@ -132,12 +128,12 @@ unloadSuites()
 /////////////////////////////////////////////////////////////////
 TestRunnerContext::
 TestRunnerContext
-      ( const StringList& suites
+      ( TestLoader* testLoader
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter)
       : This( new TestRunnerContextImpl
-               ( suites
+               ( testLoader
                , collector
                , tagsFilter
                , filter))

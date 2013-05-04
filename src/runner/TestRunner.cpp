@@ -10,7 +10,6 @@
 #include <testngpp/listener/TestResultCollector.h>
 
 #include <testngpp/runner/loaders/ModuleTestListenerLoaderFactory.h>
-#include <testngpp/runner/loaders/ModuleTestSuiteLoaderFactory.h>
 
 #include <testngpp/runner/TestSuiteRunner.h>
 #include <testngpp/runner/TestFixtureRunnerFactory.h>
@@ -49,7 +48,7 @@ struct TestRunnerImpl
       (TestSuiteContext* suite, const TestFilter* filter);
 
    void runAllTests
-      ( const StringList& suites
+      ( TestLoader*
       , TagsFilters* tagsFilters
       , const TestFilter* filter);
 
@@ -62,12 +61,12 @@ struct TestRunnerImpl
 
    TestRunnerContext* 
    loadSuites
-      ( const StringList& suites
+      ( TestLoader*
       , TagsFilters* tagsFilters
       , const TestFilter* filter);
 
    void runTests
-      ( const StringList& suites
+      ( TestLoader*
       , TagsFilters* tagsFilters
       , const TestFilter* filter);
 };
@@ -117,14 +116,13 @@ loadListeners
 
 ///////////////////////////////////////////////////////
 TestRunnerContext*
-TestRunnerImpl::
-loadSuites
-   ( const StringList& suites
+TestRunnerImpl::loadSuites
+   ( TestLoader* testLoader
    , TagsFilters* tagsFilters
    , const TestFilter* filter)
 {
    return new TestRunnerContext
-            ( suites
+            ( testLoader
             , resultManager->getResultCollector()
             , tagsFilters
             , filter);
@@ -140,8 +138,7 @@ createSuiteRunner(bool useSandbox, unsigned int maxConcurrent)
 }
 
 ///////////////////////////////////////////////////////
-void TestRunnerImpl::
-runTestSuite
+void TestRunnerImpl::runTestSuite
       (TestSuiteContext* suite, const TestFilter* filter)
 {
    __TESTNGPP_TRY
@@ -162,9 +159,8 @@ runTestSuite
 }
 
 
-void
-TestRunnerImpl::
-runAllSuites
+///////////////////////////////////////////////////////
+void TestRunnerImpl::runAllSuites
       ( TestRunnerContext* context, const TestFilter* filter)
 {
    for(unsigned int i=0; i<context->numberOfSuites(); i++)
@@ -172,16 +168,15 @@ runAllSuites
       runTestSuite(context->getSuite(i), filter);
    }
 }
+
 ///////////////////////////////////////////////////////
-void
-TestRunnerImpl::
-runAllTests
-      ( const StringList& suites
+void TestRunnerImpl::runAllTests
+      ( TestLoader* testLoader
       , TagsFilters* tagsFilters
       , const TestFilter* filter)
 {
    TestResultCollector* collector = resultManager->getResultCollector();
-   TestRunnerContext* context = loadSuites(suites, tagsFilters, filter);
+   TestRunnerContext* context = loadSuites(testLoader, tagsFilters, filter);
 
    while(1)
    {
@@ -201,9 +196,8 @@ runAllTests
 
 ///////////////////////////////////////////////////////
 void
-TestRunnerImpl::
-runTests
-      ( const StringList& suites
+TestRunnerImpl::runTests
+      ( TestLoader* testLoader
       , TagsFilters* tagsFilters
       , const TestFilter* filter)
 {
@@ -212,7 +206,7 @@ runTests
    StupidTimer timer;
    timer.start();
 
-   runAllTests(suites, tagsFilters, filter);
+   runAllTests( testLoader, tagsFilters, filter);
 
    timeval tv = timer.stop();
    resultManager->endTest(tv.tv_sec, tv.tv_usec);
@@ -239,7 +233,7 @@ TestRunner::~TestRunner()
 int
 TestRunner::runTests( bool useSandbox
                     , unsigned int maxConcurrent
-                    , const StringList& suitePaths
+                    , TestLoader* testLoader
                     , const StringList& listenerNames
                     , const StringList& searchingPaths
                     , const StringList& fixtures
@@ -253,7 +247,7 @@ TestRunner::runTests( bool useSandbox
    __TESTNGPP_TRY
    {
       TagsFilters* tagsFilter = TagsParser::parse(tagsFilterOption);
-      This->runTests(suitePaths, tagsFilter, filter);
+      This->runTests(testLoader, tagsFilter, filter);
       delete tagsFilter;
    }
    __TESTNGPP_CATCH(Error& e)

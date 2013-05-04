@@ -3,6 +3,7 @@
 #define __TESTNGPP_TEST_SUITE_CONTEXT_H
 
 #include <testngpp/testngpp.h>
+#include <string>
 
 TESTNGPP_NS_START
 
@@ -12,7 +13,7 @@ struct TestFilter;
 struct TagsFilters;
 struct TestSuiteDesc;
 struct TestResultCollector;
-
+struct TestSuiteLoader;
 struct TestSuiteContextImpl;
 
 /////////////////////////////////////////////////////////////////
@@ -20,7 +21,6 @@ struct TestSuiteContext
 {
    TestSuiteContext
       ( TestSuiteLoader* loader
-      , const std::string& path
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter);

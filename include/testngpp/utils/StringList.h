@@ -2,16 +2,16 @@
 #ifndef __TESTNGPP_STRING_LIST_H
 #define __TESTNGPP_STRING_LIST_H
 
-#include <list>
-#include <string>
-
 #include <testngpp/testngpp.h>
+
+#include <vector>
+#include <string>
 
 TESTNGPP_NS_START
 
 struct StringList
 {
-   typedef std::list<std::string> Type;
+   typedef std::vector<std::string> Type;
 
    Type& get() const
    { return const_cast<Type&>(elems); }

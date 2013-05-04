@@ -17,7 +17,7 @@ struct LTModuleLoader : public ModuleLoader
 
    ~LTModuleLoader(); 
 
-	void load(const std::string& modulePath);
+   void load(const std::string& modulePath);
 
    void unload();
 

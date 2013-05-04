@@ -1,52 +1,36 @@
 
-#include <vector>
-
+#include <testngpp/runner/TestSuiteContext.h>
 #include <testngpp/comm/ExceptionKeywords.h>
-
 #include <testngpp/utils/InternalError.h>
-
 #include <testngpp/internal/Error.h>
 #include <testngpp/internal/TestSuiteDesc.h>
-
 #include <testngpp/listener/TestResultCollector.h>
-
-#include <testngpp/runner/loaders/TestSuiteLoader.h>
-
+#include <testngpp/runner/TestSuiteLoader.h>
 #include <testngpp/runner/TagsFilters.h>
 #include <testngpp/runner/TestFilter.h>
 #include <testngpp/runner/TestFixtureContext.h>
-#include <testngpp/runner/TestSuiteDescEntryNameGetter.h>
 
-#include <testngpp/runner/TestSuiteContext.h>
+#include <vector>
+
+
  
 TESTNGPP_NS_START
  
 /////////////////////////////////////////////////////////////////
-namespace
-{
-   const std::string testngppTestSuiteDescGetter("___testngpp_test_suite_desc_getter");
-}
-
-/////////////////////////////////////////////////////////////////
 
 struct TestSuiteContextImpl
-   : public TestSuiteDescEntryNameGetter
 {
    TestSuiteContextImpl
       ( TestSuiteLoader* loader
-      , const std::string& path
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter);
 
    ~TestSuiteContextImpl();
 
-   std::string getDescEntryName() const
-   { return testngppTestSuiteDescGetter; }
-
 private:
 
-   void load( const std::string& path );
+   void load();
    void loadFixtures( TagsFilters* tagsFilter 
                     , const TestFilter* filter);
 
@@ -54,33 +38,29 @@ private:
 
    void clear();
 
-private:
 
+public:
    TestSuiteLoader* suiteLoader; // Y
    TestResultCollector* resultCollector; //X
-public:
+
 
    std::vector<TestFixtureContext*> fixtures;
    TestSuiteDesc* suite; //X
-   std::string suitePath;
-
 };
 
 /////////////////////////////////////////////////////////////////
 TestSuiteContextImpl::TestSuiteContextImpl
       ( TestSuiteLoader* loader
-      , const std::string& path
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter)
       : suiteLoader(loader)
       , resultCollector(collector)
 	  , suite(0)
-	  , suitePath(path)
 {
    __TESTNGPP_TRY
    {
-      load(path);
+      load();
       loadFixtures(tagsFilter, filter);
    }
    __TESTNGPP_CATCH_ALL
@@ -137,18 +117,16 @@ unloadFixtures()
 /////////////////////////////////////////////////////////////////
 void
 TestSuiteContextImpl::
-load( const std::string& path )
+load()
 {
-   StringList searchingPaths;
-
    __TESTNGPP_TRY
    {
-      suite = suiteLoader->load(searchingPaths, path, this);
+      suite = suiteLoader->load();
    }
    __TESTNGPP_CATCH(std::exception& e)
    {
       resultCollector->addError
-         ( "test suite \"" + path + "\" can't be loaded : " + e.what() );
+         ( "test suite \"" + suiteLoader->getSuitePath() + "\" can't be loaded : " + e.what() );
       throw;
    }
    __TESTNGPP_END_TRY
@@ -178,21 +156,14 @@ TestFixtureContext* TestSuiteContext::getFixture(unsigned int index) const
 }
 
 /////////////////////////////////////////////////////////////////
-const std::string& TestSuiteContext::getSuitePath() const
-{
-	return This->suitePath;
-}
-/////////////////////////////////////////////////////////////////
 TestSuiteContext::TestSuiteContext
       ( TestSuiteLoader* loader
-      , const std::string& path
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter
       )
       : This( new TestSuiteContextImpl
                ( loader
-               , path
                , collector
                , tagsFilter
                , filter)
@@ -200,6 +171,12 @@ TestSuiteContext::TestSuiteContext
 {
 }
             
+/////////////////////////////////////////////////////////////////
+const std::string& TestSuiteContext::getSuitePath() const
+{
+   return This->suiteLoader->getSuitePath();
+}
+
 /////////////////////////////////////////////////////////////////
 TestSuiteContext::
 ~TestSuiteContext()

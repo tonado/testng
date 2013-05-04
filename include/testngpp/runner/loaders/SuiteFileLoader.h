@@ -1,6 +1,6 @@
 
-#ifndef __TESTNGPP_TEST_SUITE_LOADER_H
-#define __TESTNGPP_TEST_SUITE_LOADER_H
+#ifndef __TESTNGPP_SUITE_FILE_LOADER_H
+#define __TESTNGPP_SUITE_FILE_LOADER_H
 
 #include <testngpp/testngpp.h>
 #include <testngpp/utils/StringList.h>
@@ -10,7 +10,7 @@ TESTNGPP_NS_START
 struct TestSuiteDesc;
 struct TestSuiteDescEntryNameGetter;
 
-struct TestSuiteLoader
+struct SuiteFileLoader
 {
    virtual TestSuiteDesc*
    load( const StringList& searchingPaths
@@ -19,7 +19,7 @@ struct TestSuiteLoader
 
    virtual void unload() = 0;
 
-	virtual ~TestSuiteLoader() {}
+   virtual ~SuiteFileLoader() {}
 };
 
 TESTNGPP_NS_END

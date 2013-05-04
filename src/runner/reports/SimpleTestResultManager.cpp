@@ -16,6 +16,8 @@
 #include <testngpp/runner/loaders/TestListenerLoaderFactory.h>
 #include <testngpp/runner/SimpleTestResultManager.h>
 
+#include <list>
+
 TESTNGPP_NS_START
 
 struct SimpleTestResultManagerImpl

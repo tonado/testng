@@ -10,7 +10,7 @@ TESTNGPP_NS_START
 
 struct ModuleLoader
 {
-	virtual void load( const StringList& searchingPaths
+   virtual void load( const StringList& searchingPaths
                     , const std::string& modulePath) = 0;
 
    virtual void unload() = 0;

@@ -11,14 +11,14 @@ struct TestSuiteContext;
 struct TestFilter;
 struct TagsFilters;
 struct TestResultCollector;
-
+struct TestLoader;
 struct TestRunnerContextImpl;
 
 /////////////////////////////////////////////////////////////////
 struct TestRunnerContext
 {
    TestRunnerContext
-      ( const StringList& nameOfSuites
+      ( TestLoader* loader
       , TestResultCollector* collector
       , TagsFilters* tagsFilter
       , const TestFilter* filter);

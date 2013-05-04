@@ -1,7 +1,7 @@
 
 #include <testngpp/internal/Error.h>
 
-#include <testngpp/runner/loaders/ModuleTestSuiteLoader.h>
+#include <testngpp/runner/loaders/ModuleSuiteFileLoader.h>
 #include <testngpp/runner/loaders/ModuleLoader.h>
 #include <testngpp/runner/loaders/ModuleLoaderFactory.h>
 
@@ -13,14 +13,14 @@
 
 TESTNGPP_NS_START
 
-struct ModuleTestSuiteLoaderImpl
+struct ModuleSuiteFileLoaderImpl
     : public TestSuiteDescEntryNameGetter
 {
-   ModuleTestSuiteLoaderImpl(ModuleLoader* moduleLoader)
+   ModuleSuiteFileLoaderImpl(ModuleLoader* moduleLoader)
       : loader(moduleLoader)
    {}
    
-   ~ModuleTestSuiteLoaderImpl();
+   ~ModuleSuiteFileLoaderImpl();
 
    TestSuiteDesc*
    load( const StringList& searchingPaths \
@@ -37,7 +37,7 @@ struct ModuleTestSuiteLoaderImpl
 
 ///////////////////////////////////////////////////////////////
 void
-ModuleTestSuiteLoaderImpl::unload()
+ModuleSuiteFileLoaderImpl::unload()
 {
    if(loader != 0)
    {
@@ -46,14 +46,14 @@ ModuleTestSuiteLoaderImpl::unload()
    }
 }
 ///////////////////////////////////////////////////////////////
-ModuleTestSuiteLoaderImpl::~ModuleTestSuiteLoaderImpl()
+ModuleSuiteFileLoaderImpl::~ModuleSuiteFileLoaderImpl()
 {
    unload();
 }
 
 ///////////////////////////////////////////////////////////////
 TestSuiteDesc*
-ModuleTestSuiteLoaderImpl::
+ModuleSuiteFileLoaderImpl::
 load( const StringList& searchingPaths
     , const std::string& path
     , TestSuiteDescEntryNameGetter* nameGetter)
@@ -98,20 +98,20 @@ load( const StringList& searchingPaths
 }
 
 ///////////////////////////////////////////////////////////////
-ModuleTestSuiteLoader::ModuleTestSuiteLoader(ModuleLoader* loader)
-   : This(new ModuleTestSuiteLoaderImpl(loader))
+ModuleSuiteFileLoader::ModuleSuiteFileLoader(ModuleLoader* loader)
+   : This(new ModuleSuiteFileLoaderImpl(loader))
 {
 }
 
 ///////////////////////////////////////////////////////////////
-ModuleTestSuiteLoader::~ModuleTestSuiteLoader()
+ModuleSuiteFileLoader::~ModuleSuiteFileLoader()
 {
    delete This;
 }
 
 /////////////////////////////////////////////////////////////////
 TestSuiteDesc*
-ModuleTestSuiteLoader::
+ModuleSuiteFileLoader::
 load( const StringList& searchingPaths
     , const std::string& path
     , TestSuiteDescEntryNameGetter* nameGetter)
@@ -120,7 +120,7 @@ load( const StringList& searchingPaths
 }
 
 /////////////////////////////////////////////////////////////////
-void ModuleTestSuiteLoader::unload()
+void ModuleSuiteFileLoader::unload()
 {
    This->unload();
 }

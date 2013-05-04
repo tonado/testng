@@ -10,6 +10,7 @@
 #include <testngpp/comm/ExceptionKeywords.h>
 
 #include <testngpp/internal/MemChecker.h>
+#include <testngpp/runner/DynamicLoader.h>
 
 USING_TESTNGPP_NS
 
@@ -194,7 +195,9 @@ int real_main(int argc, char* argv[])
    
    std::string tagsFilterOption = getSingleOption("t", options, "*");
                                                  
-   return TestRunner().runTests(useSandbox(options), maxConcurrent, options.args, listeners
+   DynamicLoader loader(options.args);
+
+   return TestRunner().runTests(useSandbox(options), maxConcurrent, &loader, listeners
                          , searchingPathsOfListeners, fixtures, tagsFilterOption);
 }
 

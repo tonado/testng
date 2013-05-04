@@ -81,9 +81,11 @@ SET(TESTNGRUNNER_LIB_SRCS
   runners/TestFixtureContext.cpp
   runners/TestRunnerContext.cpp
   runners/TestCaseRunnerFactory.cpp
+  runners/DynamicSuiteLoader.cpp
+  runners/DynamicLoader.cpp
 
-  loaders/ModuleTestSuiteLoader.cpp 
-  loaders/ModuleTestSuiteLoaderFactory.cpp 
+  loaders/ModuleSuiteFileLoader.cpp 
+  loaders/ModuleSuiteFileLoaderFactory.cpp 
   loaders/ModuleTestListenerLoader.cpp 
   loaders/ModuleTestListenerLoaderFactory.cpp 
 
@@ -177,7 +179,9 @@ ADD_LIBRARY(testngpp-runner-lib STATIC ${TESTNGRUNNER_LIB_SRCS})
 TARGET_LINK_LIBRARIES(testngpp-runner-lib ${TESTNGPP_LIBRARY})
 
 IF(UNIX)
-ADD_EXECUTABLE(testngpp-runner TestRunnerMain.cpp ../MemChecker.cpp ../TestFixture.cpp) 
+ADD_EXECUTABLE(testngpp-runner 
+   TestRunnerMain.cpp 
+   ../MemChecker.cpp ../TestFixture.cpp) 
 ENDIF(UNIX)
 
 IF(NOT UNIX)
