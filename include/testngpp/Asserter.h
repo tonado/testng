@@ -28,10 +28,14 @@
 #include <testngpp/utils/Formatter.h>
 
 #if defined(__GNUC__)
-#define TESTNGPP_TYPEOF(expr) typeof(expr)
+  #if defined(__GXX_EXPERIMENTAL_CXX0X__)
+    #define TESTNGPP_TYPEOF(expr) decltype(expr)
+  #else
+    #define TESTNGPP_TYPEOF(expr) typeof(expr)
+  #endif
 #else
-#include <boost/typeof/typeof.hpp>
-#define TESTNGPP_TYPEOF(expr) BOOST_TYPEOF(expr)
+  #include <boost/typeof/typeof.hpp>
+  #define TESTNGPP_TYPEOF(expr) BOOST_TYPEOF(expr)
 #endif
 
 TESTNGPP_NS_START
