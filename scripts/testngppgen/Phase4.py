@@ -92,6 +92,7 @@ static struct %s
         , %s
         , "%s"
         , %d)
+        : belongedFixture(0)
    {}
 
    void setFixture(TESTNGPP_NS::TestFixture* fixture)
