@@ -37,7 +37,7 @@ ENDIF(WIN32)
 ADD_LIBRARY(testngpp-user STATIC ${TESTNGPP_USER_SRC})
 
 IF(UNIX)
-  ADD_DEFINITIONS(-g -ggdb)
+  ADD_DEFINITIONS(-g -ggdb -fPIC)
 ENDIF(UNIX)
 
 # can not link to other lib in cmake 
