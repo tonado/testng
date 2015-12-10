@@ -10,8 +10,8 @@ def usage() :
 suite_getter_template = '''
 #include <testngpp/internal/TestSuiteDesc.h>
 
-static TESTNGPP_NS::TestSuiteDesc test_suite_desc("%s");
 extern "C" DLL_EXPORT TESTNGPP_NS::TestSuiteDesc* ___testngpp_test_suite_desc_getter() {
+   static TESTNGPP_NS::TestSuiteDesc test_suite_desc("%s");
    return &test_suite_desc;
 }
 
