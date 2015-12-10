@@ -15,11 +15,11 @@ ENDIF(MSVC)
 
 SET(THIS_DIR ${CMAKE_SOURCE_DIR}/scripts)
 
-ADD_CUSTOM_TARGET(compile-testngppgen ALL
-   COMMAND ${PYTHON} ${THIS_DIR}/pycompile.py ${THIS_DIR}) 
+#ADD_CUSTOM_TARGET(compile-testngppgen ALL
+#   COMMAND ${PYTHON} ${THIS_DIR}/pycompile.py ${THIS_DIR}) 
    
-ADD_CUSTOM_TARGET(cleanup-testngppgen
-   COMMAND ${RM} ${THIS_DIR}/*.pyc ${THIS_DIR}/testngppgen/*.pyc)
+#ADD_CUSTOM_TARGET(cleanup-testngppgen
+#   COMMAND ${RM} ${THIS_DIR}/*.pyc ${THIS_DIR}/testngppgen/*.pyc)
 
 SET(PYC_FILES 
   ${THIS_DIR}/testngppgen.pyc
@@ -51,7 +51,9 @@ SET(PYC_FILES
 FILE(REMOVE ${PYC_FILES})
 
 INSTALL(DIRECTORY . DESTINATION testngpp/generator
-       FILES_MATCHING PATTERN "*.pyc"
+       FILES_MATCHING PATTERN "*.py"
        PATTERN "CMakeFiles" EXCLUDE
        PATTERN ".svn" EXCLUDE
-       PATTERN ".py" EXCLUDE)
+       PATTERN "setup.py" EXCLUDE
+       PATTERN "setup_linux.py" EXCLUDE
+       PATTERN "pycompile.py" EXCLUDE)
